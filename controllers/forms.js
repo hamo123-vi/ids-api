@@ -10,13 +10,14 @@ exports.submitForm = asyncHandler( async (req, res, next) => {
 
     const form = await Form.create(req.body)
 
+    let message = "You have new conact: "
+
     try {
         await sendMail({
-          lastName: req.body.lastName,
-          firstName: req.body.firstName,
           email: req.body.email,
-          text: req.body.text,
-          cv: req.body.cv
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          message
         });
       res.status(200).json({ success: true, data: 'Form submitted!' });
       } catch (err) {

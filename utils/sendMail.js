@@ -4,21 +4,20 @@ const sendMail = async(options) => {
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: process.env.MAILER_HOST,
-    port: process.env.MAILER_PORT,
+    service: process.env.SERVICE,
     auth: {
       user: process.env.MAILER_USER,
-      pass: process.env.MAILER_PASSWORD, // generated ethereal password
+      pass: process.env.MAILER_PASSWORD
     },
   });
 
   // send mail with defined transport object
   let message = {
-    from: `${options.email}`,
+    from: 'Contact notification <doNotReply@id-s.ba>',
     to: process.env.MAIL_TO,
     subject: process.env.SUBJECT,
-    text: options.text,
-    cv: options.cv
+    name: `${options.firstName} ${options.lastName}`,
+    text: `${options.message} ${options.firstName} ${options.lastName}`
   };
 
   const info = await transporter.sendMail(message);
