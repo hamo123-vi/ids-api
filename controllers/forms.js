@@ -1,3 +1,4 @@
+const path = require('path')
 const Form = require('../models/Form')
 const asyncHandler = require('../middleware/async')
 const sendMail = require('../utils/sendMail')
@@ -8,7 +9,21 @@ const ErrorResponse = require('../utils/errorResponse')
 // @acces    Public
 exports.submitForm = asyncHandler( async (req, res, next) => {
 
-    const form = await Form.create(req.body)
+    if(req.files) {
+      const file = req.files.file;
+      file.name = `${req.body.firstName} ${req.body.firstName} ${path.parse(file.name).ext}`
+      file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+        if(err) {
+            return next(
+                new ErrorResponse('Problem with file upload', 500)
+            )
+        }
+    })
+  }
+
+    const form = await Form.create({
+      
+    })
 
     let message = "You have new conact: "
 
