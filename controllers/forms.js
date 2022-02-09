@@ -12,11 +12,6 @@ exports.submitForm = asyncHandler( async (req, res, next) => {
 
     try {
         await sendMail({
-          lastName: req.body.lastName,
-          firstName: req.body.firstName,
-          email: req.body.email,
-          text: req.body.text,
-          cv: req.body.cv
         });
       res.status(200).json({ success: true, data: 'Form submitted!' });
       } catch (err) {
