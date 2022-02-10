@@ -9,21 +9,29 @@ const ErrorResponse = require('../utils/errorResponse')
 // @acces    Public
 exports.submitForm = asyncHandler( async (req, res, next) => {
 
-    if(req.files) {
-      const file = req.files.file;
-      file.name = `${req.body.firstName} ${req.body.firstName} ${path.parse(file.name).ext}`
-      file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
-        if(err) {
-            return next(
-                new ErrorResponse('Problem with file upload', 500)
-            )
-        }
+    
+    console.log(req.files)
+    const file = req.files.cv
+    console.log(file.name)
+    if (!file) {
+      return next(new ErrorResponse("Please upload file", 400))
+    }
+
+    file.mv(`${process.env.UPLOAD_PATH}/${file.name}`, async err => {
+      if(err) {
+          return next(
+              new ErrorResponse('Problem with file upload', 500))
+      } else {
+      const form = Form.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      text: req.body.text,
+      phone: req.body.phone,
+      cv: file.name
     })
   }
-
-    const form = await Form.create({
-      
-    })
+  })
 
     let message = "You have new conact: "
 

@@ -3,6 +3,8 @@ const express = require('express')
 const dotenv = require('dotenv')
 const cors = require('cors')
 const connectDB = require('./config/db')
+const path = require('path')
+const fileUpload = require('express-fileupload')
 
 //Load env variables
 dotenv.config({ path : './config/config.env'})
@@ -16,10 +18,16 @@ const app = express()
 //Connect to database
 connectDB()
 
+//Make 'public' folder static
+app.set("view.engine", 'ejs')
+app.use(express.static('public'))
+
 //Body parser
 app.use(express.json())
+app.use(express.urlencoded({ extended: true}))
 
 //File upload
+app.use(fileUpload())
 
 //Enable CORS
 app.use(cors());
